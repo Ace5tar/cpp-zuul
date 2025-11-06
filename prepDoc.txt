@@ -1,0 +1,22 @@
+Prep document for psudocode and stuff
+
+Zone class:
+	private:
+		vector<Item*> items;
+		int zoneIndex; (index in the main zones vector list, useful to not have to iterate over each room to find one)
+		map<char*, Zone*> exits;
+		map<char*, bool> statusFlags;
+		char* zoneDescription;
+		char* zoneName;
+	public:
+		Zone()
+		Zone(int) (int is the index)
+		void addItem(Item*)
+		void delItem(Item*)
+		vector<Item*> getItems()
+		Item* getItemByName(char*)
+		int getIndex();
+		void setName();
+		char* getName
+
+Item 
