@@ -19,4 +19,7 @@ Zone class:
 		void setName();
 		char* getName
 
-Item 
+Item class:
+	private:
+		char* itemName;
+		 

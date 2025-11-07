@@ -19,7 +19,7 @@ class Zone {
 		map<char*, bool> statusFlags;
 		char* zoneDescription;
 		char* zoneName;
-	public
+	public:
 		Zone();
 		Zone(int index);
 		void addItem(Item* item);

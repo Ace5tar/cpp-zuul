@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <cstring>
 #include "Item.h"
 #include "Zone.h"
 
@@ -15,32 +16,41 @@ using namespace std;
 
 // Default constructor, should never be called
 Zone::Zone() {
-	vector<Item*> items;
-	map<char*, Zone*> exits;
-	map<char*, bool> statusFlags;
-	char* zoneDescription;
-	char* zoneName;
-	int zoneIndex = 0;
+	items = new vector<Item*>;
+	exits = new map<char* Zone*>;
+	statusFlags = new map<char*, bool>;
+	zoneDescription = "DESCRIPTION";
+	zoneName = "ZONE";
+	zoneIndex = 0;
 }
 
-// Parameterized constructor, only takes an integer, set other data with it's method
+// Parameterized constructor, only takes an integer, set other data with their methods
 Zone::Zone(int index) {
-	vector<Item*> items;
-	map<char*, Zone*> exits;
-	map<char*, bool> statusFlags;
-	char* zoneDescription;
-	char* zoneName;
-	int zoneIndex = index;
+	items = new vector<Item*>;
+	exits = new map<char* Zone>;
+	statusFlags = new map<char*, bool>;
+	zoneDescription = "DESCRIPTION";
+	zoneName = "ZONE"; 
+	zoneIndex = index;
 }
 
-// add an item to the item vector TODO
+// add an item to the item vector or increase the count if an item of the same name exists
 void Zone::addItem(Item* item) {
-
+	Item* itemPointer = this->getItemByName(item->getName());
+	if (itemPointer != nullptr) {
+		itemPointer->changeCount(item->getCount());
+	} else {
+		items.push_back(item);
+	}
 } 
 
-// remove an item from the item vector TODO
+// remove an item from the item vector 
 void Zone::delItem(Item* item) {
-
+	int i = 0;
+	for (Item* itemIt : items) {
+		if (itemIt == item) {items.erase(items.begin() + i);	
+		++i;
+	}
 }
 	
 // Returns the vector of items in this room
@@ -48,9 +58,14 @@ vector<Item*> Zone::getItems() {
 	return items;
 }
 
-// Returns an item pointer to the item specified, returns a null pointer if item doesnt exist TODO
+// Returns an item pointer to the item specified, returns a null pointer if item doesnt exist
 Item* Zone::getItemByName(char* item) {
-
+	for (Item* itemIt : items) {
+		if (strcmp(itemIt->getName(), item) == 0) {
+			return itemIt;
+				}
+			}
+	return nullptr;
 }
 
 
