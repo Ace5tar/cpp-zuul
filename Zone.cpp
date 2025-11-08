@@ -16,21 +16,11 @@ using namespace std;
 
 // Default constructor, should never be called
 Zone::Zone() {
-	items = new vector<Item*>;
-	exits = new map<char* Zone*>;
-	statusFlags = new map<char*, bool>;
-	zoneDescription = "DESCRIPTION";
-	zoneName = "ZONE";
 	zoneIndex = 0;
 }
 
 // Parameterized constructor, only takes an integer, set other data with their methods
 Zone::Zone(int index) {
-	items = new vector<Item*>;
-	exits = new map<char* Zone>;
-	statusFlags = new map<char*, bool>;
-	zoneDescription = "DESCRIPTION";
-	zoneName = "ZONE"; 
 	zoneIndex = index;
 }
 
@@ -48,7 +38,7 @@ void Zone::addItem(Item* item) {
 void Zone::delItem(Item* item) {
 	int i = 0;
 	for (Item* itemIt : items) {
-		if (itemIt == item) {items.erase(items.begin() + i);	
+		if (itemIt == item) items.erase(items.begin() + i);	
 		++i;
 	}
 }
@@ -70,7 +60,7 @@ Item* Zone::getItemByName(char* item) {
 
 
 // Returns the index of this zone
-void Zone::getIndex() {
+int Zone::getIndex() {
 	return zoneIndex;
 }
 
@@ -91,7 +81,7 @@ void Zone::setDescription(char* description) {
 
 // Returns the description of this zone
 char* Zone::getDescription() {
-	return zoneDescription();
+	return zoneDescription;
 }
 
 // Returns the value of the status flag with the given name
@@ -108,7 +98,7 @@ void Zone::setStatusFlag(char* flagName, bool value) {
 Zone::~Zone() {
 	for (auto const& [key, val] : statusFlags) {delete[] key;}
 	for (auto const& [key, val] : exits) {delete[] key;}
-	for (Item* item : items) {delete item}
+	for (Item* item : items) {delete item;}
 	delete[] zoneDescription;
 	delete[] zoneName;
 }

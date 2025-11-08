@@ -2,6 +2,10 @@
 
 using namespace std;
 
+#ifndef ITEM_H
+#define ITEM_H
+
+
 class Item {
 	private:
 		char* itemName;
@@ -14,6 +18,8 @@ class Item {
 		char* getName();
 		char* getDescription();
 		int getCount();
-		void changeCount();
+		void changeCount(int deltaCount);
 		~Item();
-}
+};
+
+#endif

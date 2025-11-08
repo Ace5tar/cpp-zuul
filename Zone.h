@@ -34,4 +34,4 @@ class Zone {
 		bool checkStatusFlag(char* flagName);
 		void setStatusFlag(char* flagName, bool value);
 		~Zone();
-}
+};

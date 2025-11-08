@@ -5,8 +5,6 @@ using namespace std;
 
 // Default constrcutor
 Item::Item() {
-	itemName = "ITEM";
-	itemDescription = "DESCRIPTION";
 	itemNum = 1;
 }
 
