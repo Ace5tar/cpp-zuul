@@ -1,3 +1,8 @@
+/*
+ * Belle Biery
+ * 11/6/2025
+ * Class for items
+ */
 #include <iostream>
 #include "Item.h"
 

@@ -9,55 +9,27 @@
 #include <vector>
 #include <map>
 #include <cstring>
-#include "Item.h"
+#include "Inventory.h"
 #include "Zone.h"
 
 using namespace std;
 
 // Default constructor, should never be called
 Zone::Zone() {
+	invPtr = new Inventory();
 	zoneIndex = 0;
 }
 
 // Parameterized constructor, only takes an integer, set other data with their methods
 Zone::Zone(int index) {
+	invPtr = new Inventory();
 	zoneIndex = index;
 }
 
-// add an item to the item vector or increase the count if an item of the same name exists
-void Zone::addItem(Item* item) {
-	Item* itemPointer = this->getItemByName(item->getName());
-	if (itemPointer != nullptr) {
-		itemPointer->changeCount(item->getCount());
-	} else {
-		items.push_back(item);
-	}
-} 
-
-// remove an item from the item vector 
-void Zone::delItem(Item* item) {
-	int i = 0;
-	for (Item* itemIt : items) {
-		if (itemIt == item) items.erase(items.begin() + i);	
-		++i;
-	}
+// Returns a pointer to the inventory in this room
+Inventory* Zone::getInvPtr() {
+	return invPtr;
 }
-	
-// Returns the vector of items in this room
-vector<Item*> Zone::getItems() {
-	return items;
-}
-
-// Returns an item pointer to the item specified, returns a null pointer if item doesnt exist
-Item* Zone::getItemByName(char* item) {
-	for (Item* itemIt : items) {
-		if (strcmp(itemIt->getName(), item) == 0) {
-			return itemIt;
-				}
-			}
-	return nullptr;
-}
-
 
 // Returns the index of this zone
 int Zone::getIndex() {
@@ -98,7 +70,6 @@ void Zone::setStatusFlag(char* flagName, bool value) {
 Zone::~Zone() {
 	for (auto const& [key, val] : statusFlags) {delete[] key;}
 	for (auto const& [key, val] : exits) {delete[] key;}
-	for (Item* item : items) {delete item;}
 	delete[] zoneDescription;
 	delete[] zoneName;
 }

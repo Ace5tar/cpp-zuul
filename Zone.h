@@ -8,12 +8,16 @@
 #include <vector>
 #include <map>
 #include "Item.h"
+#include "Inventory.h"
 
 using namespace std;
 
+#ifndef ZONE_H
+#define ZONE_H
+
 class Zone {
 	public:
-		vector<Item*> items;
+		Inventory* invPtr;
 		int zoneIndex;
 		map<char*, Zone*> exits;
 		map<char*, bool> statusFlags;
@@ -22,10 +26,10 @@ class Zone {
 	public:
 		Zone();
 		Zone(int index);
-		void addItem(Item* item);
-		void delItem(Item* item);
-		vector<Item*> getItems();
-		Item* getItemByName(char* item);
+		//void addItem(Item* item);
+		//void delItem(Item* item);
+		Inventory* getInvPtr();
+		//Item* getItemByName(char* item);
 		int getIndex();
 		void setName(char* name);
 		char* getName();
@@ -35,3 +39,5 @@ class Zone {
 		void setStatusFlag(char* flagName, bool value);
 		~Zone();
 };
+
+#endif
