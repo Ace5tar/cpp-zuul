@@ -70,6 +70,7 @@ void Zone::setStatusFlag(char* flagName, bool value) {
 Zone::~Zone() {
 	for (auto const& [key, val] : statusFlags) {delete[] key;}
 	for (auto const& [key, val] : exits) {delete[] key;}
+	delete invPtr;
 	delete[] zoneDescription;
 	delete[] zoneName;
 }
