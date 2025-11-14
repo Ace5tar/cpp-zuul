@@ -37,8 +37,10 @@ int Zone::getIndex() {
 }
 
 // Sets the name of this zone
-void Zone::setName(char* name) {
-	zoneName = name;	
+void Zone::setName(const char* name) {
+	char* heapMem = new char[64];
+	strcpy(heapMem, name);
+	zoneName = heapMem;	
 }
 
 // Returns the name of this zone
@@ -46,9 +48,11 @@ char* Zone::getName() {
 	return zoneName;
 }
 
-// Sets the description of this zone
-void Zone::setDescription(char* description) {
-	zoneDescription = description;
+// Allocated memory on the heao and sets the description of this zone
+void Zone::setDescription(const char* description) {
+	char* heapMem = new char[512];
+	strcpy(heapMem, description);
+	zoneDescription = heapMem;
 }
 
 // Returns the description of this zone
@@ -56,19 +60,23 @@ char* Zone::getDescription() {
 	return zoneDescription;
 }
 
-// Returns the value of the status flag with the given name
-bool Zone::checkStatusFlag(char* flagName){
-	return statusFlags[flagName];
+void Zone::addExit(const char* exitName, Zone* exitLocation) {
+	char* heapMem = new char[64];
+	strcpy(heapMem, exitName);
+	exits.at(heapMem) = exitLocation;
 }
 
-// Changes the status flag of the given name to the given value
-void Zone::setStatusFlag(char* flagName, bool value) {
-	statusFlags[flagName] = value;
+Zone* Zone::getExitByName(const char* exitName) {
+	for (const auto& [name, ptr] : exits) {
+		if (strcmp(name, exitName) == 0) return ptr;
+	}
+	return nullptr;
 }
+
+
 
 // Deconstructor
 Zone::~Zone() {
-	for (auto const& [key, val] : statusFlags) {delete[] key;}
 	for (auto const& [key, val] : exits) {delete[] key;}
 	delete invPtr;
 	delete[] zoneDescription;

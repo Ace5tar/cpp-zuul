@@ -26,17 +26,14 @@ class Zone {
 	public:
 		Zone();
 		Zone(int index);
-		//void addItem(Item* item);
-		//void delItem(Item* item);
 		Inventory* getInvPtr();
-		//Item* getItemByName(char* item);
 		int getIndex();
-		void setName(char* name);
+		void setName(const char* name);
 		char* getName();
-		void setDescription(char* description);
+		void setDescription(const char* description);
 		char* getDescription();
-		bool checkStatusFlag(char* flagName);
-		void setStatusFlag(char* flagName, bool value);
+		void addExit(const char* exitName, Zone* exitLocation);
+		Zone* getExitByName(const char* exitName);
 		~Zone();
 };
 
