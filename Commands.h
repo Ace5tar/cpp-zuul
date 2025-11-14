@@ -4,6 +4,9 @@
 
 using namespace std;
 
+#ifndef COMMANDS_H
+#define COMMANDS_H
+
 class Commands{
 	private:
 		typedef int (*fnPtr)(vector<char*>);
@@ -16,3 +19,5 @@ class Commands{
 		void runCommand(char* key, vector<char*> args);
 		~Commands();
 };
+
+#endif
