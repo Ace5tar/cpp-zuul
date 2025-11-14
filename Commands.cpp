@@ -11,7 +11,7 @@
 
 using namespace std;
 
-typedef void (*fnPtr)(vector<char*>);
+typedef int (*fnPtr)(vector<char*>);
 
 // Default costructor
 Commands::Commands() {}

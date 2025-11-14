@@ -6,7 +6,7 @@ using namespace std;
 
 class Commands{
 	private:
-		typedef void (*fnPtr)(vector<char*>);
+		typedef int (*fnPtr)(vector<char*>);
 		map<char*, fnPtr> commands;
 		fnPtr getCommand(char* key);
 		
