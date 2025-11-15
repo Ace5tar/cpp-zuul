@@ -4,6 +4,7 @@
  * Class for items
  */
 #include <iostream>
+#include <cstring>
 #include "Item.h"
 
 using namespace std;
@@ -14,16 +15,30 @@ Item::Item() {
 }
 
 // Parameterized constructor without count - defaults to one
-Item::Item(char* name, char* description) {
-	itemName = name;
-	itemDescription = description;
+Item::Item(const char* name, const char* description) {
+	char* nameHeapMem = new char[64];
+	char* descHeapMem = new char[512];
+
+	strcpy(nameHeapMem, name);
+	strcpy(descHeapMem, description
+
+	itemName = nameHeapMem;
+	itemDescription = descHeapMem;
+
 	itemNum = 1;
 }
 
 // Parameterized constructor with count
-Item::Item(char* name, char* description, int count) {
-	itemName = name;
-	itemDescription = description;
+Item::Item(const char* name, const char* description, int count) {
+	char* nameHeapMem = new char[64];
+	char* descHeapMem = new char[512];
+
+	strcpy(nameHeapMem, name);
+	strcpy(descHeapMem, description
+
+	itemName = nameHeapMem;
+	itemDescription = descHeapMem;
+
 	itemNum = count;
 }
 
