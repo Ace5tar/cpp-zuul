@@ -20,7 +20,7 @@ Item::Item(const char* name, const char* description) {
 	char* descHeapMem = new char[512];
 
 	strcpy(nameHeapMem, name);
-	strcpy(descHeapMem, description
+	strcpy(descHeapMem, description);
 
 	itemName = nameHeapMem;
 	itemDescription = descHeapMem;
@@ -34,7 +34,7 @@ Item::Item(const char* name, const char* description, int count) {
 	char* descHeapMem = new char[512];
 
 	strcpy(nameHeapMem, name);
-	strcpy(descHeapMem, description
+	strcpy(descHeapMem, description);
 
 	itemName = nameHeapMem;
 	itemDescription = descHeapMem;
