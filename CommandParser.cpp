@@ -14,30 +14,37 @@ using namespace std;
 
 // Parameterized constructor
 CommandParser::CommandParser(char* inputText) {
-	rawText = inputText;
-	char* delimPointer = strtok(rawText, " ");
+	txtLoc = new char[64];
+	strcpy(txtLoc, inputText);
+
+	const char* delimPointer = strtok(txtLoc, " ");
 	command = delimPointer;
 	while (delimPointer != NULL) {
-		arguments.push_back(strtok(NULL, " "));
+		delimPointer = strtok(NULL, " ");
+		arguments.push_back(delimPointer);
 	}	
 }
 
 // Returns first part of the input text
-char* CommandParser::getCommand() {
+const char* CommandParser::getCommand() {
 	return command;
 }
 
 // Returns the first argument given 
-char* CommandParser::getArg() {
+const char* CommandParser::getArg() {
 	return arguments.at(0);
 }
 
 // Returns the argument at the given index
-char* CommandParser::getArg(int index) {
+const char* CommandParser::getArg(int index) {
 	return arguments.at(index);
+}
+
+vector <const char*> CommandParser::getArgs() {
+	return arguments;
 }
 
 // Deconstructor
 CommandParser::~CommandParser() {
-	delete[] rawText;
+	delete[] txtLoc;
 }

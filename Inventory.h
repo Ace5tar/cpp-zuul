@@ -11,6 +11,7 @@ class Inventory {
 		vector<Item*> itemVect;
 	public:
 		Inventory();
+		vector<Item*> getItemVect();
 		void addItem(Item* item);
 		void delItem(Item* item); 	
 		Item* getItemByName(char* itemName);

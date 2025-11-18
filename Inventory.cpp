@@ -43,6 +43,11 @@ Item* Inventory::getItemByName(char* itemName) {
 	return nullptr;
 }
 
+//Returns the item vector
+vector<Item*> Inventory::getItemVect() {
+	return itemVect;
+}
+
 // Deconstructor
 Inventory::~Inventory() {
 	for (Item* item : itemVect) {delete item;}

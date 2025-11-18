@@ -5,13 +5,14 @@ using namespace std;
 
 class CommandParser{
 	private:
-		char* rawText;
-		char* command;
-		vector<char*> arguments;	
+		char* txtLoc;
+		const char* command;
+		vector<const char*> arguments;	
 	public:
 		CommandParser(char* inputText);
-		char* getCommand();
-		char* getArg();
-		char* getArg(int index);
+		const char* getCommand();
+		const char* getArg();
+		const char* getArg(int index);
+		vector<const char*> getArgs();
 		~CommandParser();
 };
