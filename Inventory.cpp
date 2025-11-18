@@ -34,7 +34,7 @@ void Inventory::delItem(Item* item) {
 }
 
 // Returns an item pointer to the item specified, returns a null pointer if item doesnt exist
-Item* Inventory::getItemByName(char* itemName) {
+Item* Inventory::getItemByName(const char* itemName) {
 	for (Item* itemIt : itemVect) {
 		if (strcmp(itemIt->getName(), itemName) == 0) {
 			return itemIt;

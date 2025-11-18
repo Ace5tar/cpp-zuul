@@ -60,9 +60,16 @@ void WorldInterface::createCommands() {
 	cmds.insert({"quit", &WorldInterface::quitCommand});
 	cmds.insert({"exit", &WorldInterface::quitCommand});
 	cmds.insert({"stop", &WorldInterface::quitCommand});
+
 	cmds.insert({"move", &WorldInterface::moveCommand});
 	cmds.insert({"mv", &WorldInterface::moveCommand});
 	cmds.insert({"go", &WorldInterface::moveCommand});
+
+	cmds.insert({"pickup", &WorldInterface::pickupCommand});
+
+	cmds.insert({"drop", &WorldInterface::dropCommand});
+
+	cmds.insert({"inv", &WorldInterface::invCommand});
 	
 
 }
@@ -97,9 +104,13 @@ WorldInterface::~WorldInterface() {
 void WorldInterface::printZoneDetails(Zone* zone) {
 	cout << "You are in: " << zone->getName() << endl;
 	cout << zone->getDescription() << endl;
-	cout << "There are items: " << endl; 
-	for (Item* item : zone->getInvPtr()->getItemVect()) {
-		cout << "\t" << item->getName() << " - " << item->getDescription() << endl;
+	if (zone->getInvPtr()->getItemVect().size() == 0) {
+		cout << "You don't spot any items here..." << endl;
+	} else	{	
+		cout << "There are items: " << endl; 
+		for (Item* item : zone->getInvPtr()->getItemVect()) {
+			cout << "\t" << item->getName() << " - " << item->getDescription() << endl;
+		}
 	}
 	cout << "There are exits: " << endl;
 	for (auto const [name, exit] : zone->getExitMap()) {
@@ -129,3 +140,58 @@ int WorldInterface::moveCommand(vector<const char*> args) {
 	return 0;
 
 }
+
+int WorldInterface::pickupCommand(vector<const char*> args) {
+	if (args.size() == 0) {
+		cout << "Error: Please provide an item!" << endl;
+		return 0;
+	}	
+	Item* itemPtr = player->getCurrentZone()->getInvPtr()->getItemByName(args.at(0));
+	if (itemPtr == nullptr) {
+		cout << "Error: Cannot find that item!" << endl;
+		return 0;
+	} 
+
+	player->getCurrentZone()->getInvPtr()->delItem(itemPtr);
+	player->getInvPtr()->addItem(itemPtr);
+	cout << "Picked up the " << itemPtr->getName() << endl;
+	return 0;
+
+
+}
+
+int WorldInterface::dropCommand(vector<const char*> args) {
+	if (args.size() == 0) {
+		cout << "Error: Please provide an item!" << endl;
+		return 0;
+	}	
+	Item* itemPtr = player->getInvPtr()->getItemByName(args.at(0));
+	if (itemPtr == nullptr) {
+		cout << "Error: Cannot find that item!" << endl;
+		return 0;
+	} 
+
+	player->getInvPtr()->delItem(itemPtr);
+	player->getCurrentZone()->getInvPtr()->addItem(itemPtr);
+	cout << "Dropped the " << itemPtr->getName() << endl;
+	return 0;
+}
+
+int WorldInterface::invCommand(vector<const char*> args) {
+
+	if (player->getInvPtr()->getItemVect().size() == 0) {
+		cout << "There are no items in your inventory!" << endl;
+	} else {
+		for (Item* item : player->getInvPtr()->getItemVect()) {
+			cout << "\t" << item->getName() << " - " << item->getDescription() << endl;
+		}
+	}
+
+	return 0;
+}
+
+int WorldInterface::helpCommand(vector<const char*> args) {
+	return 0;
+}
+
+
