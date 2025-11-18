@@ -19,9 +19,10 @@ CommandParser::CommandParser(char* inputText) {
 
 	const char* delimPointer = strtok(txtLoc, " ");
 	command = delimPointer;
+	delimPointer = strtok(NULL, " ");
 	while (delimPointer != NULL) {
-		delimPointer = strtok(NULL, " ");
 		arguments.push_back(delimPointer);
+		delimPointer = strtok(NULL, " ");
 	}	
 }
 
