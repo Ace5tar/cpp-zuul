@@ -61,6 +61,9 @@ void WorldInterface::createCommands() {
 	cmds.insert({"exit", &WorldInterface::quitCommand});
 	cmds.insert({"stop", &WorldInterface::quitCommand});
 	cmds.insert({"move", &WorldInterface::moveCommand});
+	cmds.insert({"mv", &WorldInterface::moveCommand});
+	cmds.insert({"go", &WorldInterface::moveCommand});
+	
 
 }
 
@@ -79,7 +82,7 @@ void WorldInterface::createSBAs() {
 
 fnPtr WorldInterface::getCmd(const char* key) {
 	for (auto const [cmdKey, cmd] : cmds) {
-		if (strcmp(cmdKey, vector contains c++key) == 0) {return cmd;}
+		if (strcmp(cmdKey, key) == 0) {return cmd;}
 	}
 	return nullptr;
 }
@@ -102,7 +105,6 @@ void WorldInterface::printZoneDetails(Zone* zone) {
 	for (auto const [name, exit] : zone->getExitMap()) {
 		cout << "\t" << name << endl;
 	}
-	cout << endl;
 }
 
 
