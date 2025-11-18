@@ -23,8 +23,10 @@ class WorldInterface{
 		void createSBAs();
 		fnPtr getCmd(const char* key);
 		char* input;
+		void printZoneDetails(Zone* zone);
 
-		int quitCommand(vector<const char*>);
+		int quitCommand(vector<const char*> args);
+		int moveCommand(vector<const char*> args);
 
 	public:
 		WorldInterface();

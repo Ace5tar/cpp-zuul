@@ -63,7 +63,7 @@ char* Zone::getDescription() {
 void Zone::addExit(const char* exitName, Zone* exitLocation) {
 	char* heapMem = new char[64];
 	strcpy(heapMem, exitName);
-	exits.at(heapMem) = exitLocation;
+	exits.insert({heapMem, exitLocation});
 }
 
 Zone* Zone::getExitByName(const char* exitName) {
@@ -73,7 +73,9 @@ Zone* Zone::getExitByName(const char* exitName) {
 	return nullptr;
 }
 
-
+map<char*, Zone*> Zone::getExitMap() {
+	return exits;
+}
 
 // Deconstructor
 Zone::~Zone() {

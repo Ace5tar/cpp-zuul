@@ -20,7 +20,6 @@ class Zone {
 		Inventory* invPtr;
 		int zoneIndex;
 		map<char*, Zone*> exits;
-		map<char*, bool> statusFlags;
 		char* zoneDescription;
 		char* zoneName;
 	public:
@@ -34,6 +33,7 @@ class Zone {
 		char* getDescription();
 		void addExit(const char* exitName, Zone* exitLocation);
 		Zone* getExitByName(const char* exitName);
+		map<char*, Zone*> getExitMap();
 		~Zone();
 };
 
