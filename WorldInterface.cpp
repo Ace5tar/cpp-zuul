@@ -49,10 +49,12 @@ void WorldInterface::createZones() {
 	zoneVec.at(0)->setDescription("This is the starting zone!");
 	zoneVec.at(0)->getInvPtr()->addItem(new Item("Test-Item", "This is a test item!"));
 	zoneVec.at(0)->addExit("NORTH", zoneVec.at(1));
+	
 
 	zoneVec.at(1)->setName("Cool Zone");
 	zoneVec.at(1)->setDescription("This is the coolest zone B)");
 	zoneVec.at(1)->addExit("SOUTH", zoneVec.at(0));
+	zoneVec.at(1)->addStatusFlag("has-item", false);
 
 }
 
@@ -70,6 +72,10 @@ void WorldInterface::createCommands() {
 	cmds.insert({"drop", &WorldInterface::dropCommand});
 
 	cmds.insert({"inv", &WorldInterface::invCommand});
+
+	cmds.insert({"explore", &WorldInterface::exploreCommand});
+	cmds.insert({"examine", &WorldInterface::exploreCommand});
+	cmds.insert({"look", &WorldInterface::exploreCommand});
 	
 
 }
@@ -77,14 +83,25 @@ void WorldInterface::createCommands() {
 void WorldInterface::createSBAs() {
 	SBAVec.push_back(
 		new StateBasedAction(
-			[](){
+			[this](){
 				cout << "This is an example!" << endl;
 			}, 
-			[](){
+			[this](){
 				return false;
 			}
 		)
 	);
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(0)->setDescription("Where did the item go?");
+			},
+			[this](){
+				return zoneVec.at(1)->getInvPtr()->getItemByName("Test-Item") != nullptr;
+			}
+		)
+	);
+			
 }
 
 fnPtr WorldInterface::getCmd(const char* key) {
@@ -194,4 +211,8 @@ int WorldInterface::helpCommand(vector<const char*> args) {
 	return 0;
 }
 
+int WorldInterface::exploreCommand(vector<const char*> args) {
+	printZoneDetails(player->getCurrentZone());
+	return 0;
+}
 

@@ -30,6 +30,7 @@ class WorldInterface{
 		int pickupCommand(vector<const char*> args);
 		int dropCommand(vector<const char*> args);
 		int invCommand(vector<const char*> args);
+		int exploreCommand(vector<const char*> args);
 		int helpCommand(vector<const char*> args);
 
 	public:
