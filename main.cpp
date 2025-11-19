@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "WorldInterface.h"
+#include "world/WorldInterface.h"
 
 
 using namespace std;

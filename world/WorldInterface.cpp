@@ -2,11 +2,11 @@
 #include <vector>
 #include <map>
 #include <cstring>
-#include "Player.h"
-#include "Zone.h"
-#include "StateBasedAction.h"
+#include "world-util/Player.h"
+#include "world-util/Zone.h"
+#include "../util/StateBasedAction.h"
 #include "WorldInterface.h"
-#include "CommandParser.h"
+#include "../util/CommandParser.h"
 
 using namespace std;
 

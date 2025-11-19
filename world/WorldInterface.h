@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include "Player.h"
-#include "Zone.h"
-#include "StateBasedAction.h"
+#include "world-util/Player.h"
+#include "world-util/Zone.h"
+#include "../util/StateBasedAction.h"
 
 #ifndef WORLDINTERFACE_H
 #define WORLDINTERFACE_H
