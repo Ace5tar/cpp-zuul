@@ -77,6 +77,26 @@ map<char*, Zone*> Zone::getExitMap() {
 	return exits;
 }
 
+void Zone::addStatusFlag(const char* name, bool initValue) {
+	statusFlagMap.insert({name, initValue});
+}
+
+bool Zone::checkStatusFlag(const char* name) {
+	for (auto const [flagName, val] : statusFlagMap) {
+		if (strcmp(flagName, name)) {return val;}
+	}
+	return NULL;
+}
+
+void Zone::changeStatusFlag(const char* name, bool newValue) {
+	for (auto const [flagName, val] : statusFlagMap) {
+		if (strcmp(flagName, name)) {
+			statusFlagMap.at(flagName) = newValue;
+			return;
+		}
+	}
+}
+
 // Deconstructor
 Zone::~Zone() {
 	for (auto const& [key, val] : exits) {delete[] key;}
