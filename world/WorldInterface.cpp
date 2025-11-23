@@ -205,6 +205,7 @@ void WorldInterface::createCommands() {
 	cmds.insert({"go", &WorldInterface::moveCommand});
 
 	cmds.insert({"pickup", &WorldInterface::pickupCommand});
+	cmds.insert({"get", &WorldInterface::pickupCommand});
 
 	cmds.insert({"drop", &WorldInterface::dropCommand});
 
@@ -214,7 +215,7 @@ void WorldInterface::createCommands() {
 	cmds.insert({"examine", &WorldInterface::exploreCommand});
 	cmds.insert({"look", &WorldInterface::exploreCommand});
 	
-
+	cmds.insert({"help", &WorldInterface::helpCommand});
 }
 
 // Create the state based action vector
@@ -348,6 +349,35 @@ int WorldInterface::invCommand(vector<const char*> args) {
 
 // TODO: prints details about all of the commands
 int WorldInterface::helpCommand(vector<const char*> args) {
+	cout << "'help'" << endl
+	     << " alias - none" << endl
+	     << " arguments - none" << endl << endl
+	     << "Displays this help text" << "\n\n\n";
+
+	cout << "'move'" << endl
+	     << " alias - 'mv', 'go'" << endl
+	     << " arguments - none" << endl << endl
+	     << "Allows you to travel through zone exits" << "\n\n\n";
+
+	cout << "'pickup'" << endl
+	     << " alias - 'get'" << endl
+	     << " arguments - none" << endl << endl
+	     << "Pickup an item in your current zone" << "\n\n\n";
+
+	cout << "'drop'" << endl
+	     << " alias - none" << endl
+	     << " arguments - none" << endl << endl
+	     << "Drop an item from your inventory to your current zone" << "\n\n\n";
+
+	cout << "'explore'" << endl
+	     << " alias - 'examine', 'look'" << endl
+	     << " arguments - none" << endl << endl
+	     << "Display details about your current zone" << "\n\n\n";
+
+	cout << "'quit'" << endl
+	     << " alias - 'exit', 'stop'" << endl
+	     << " arguments - none" << endl << endl
+	     << " End the program" << "\n";
 	return 0;
 }
 
