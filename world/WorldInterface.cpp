@@ -140,7 +140,7 @@ void WorldInterface::createZones() {
 	zoneVec.at(13)->setDescription("Northwest part of the forest");
 	zoneVec.at(13)->addExit("south", zoneVec.at(12));
 	zoneVec.at(13)->addExit("east", zoneVec.at(14));
-	zoneVec.at(13)->getInvPtr()->addItem(new Item("wood", "Some wood, woodworker will definitely want some"));
+	zoneVec.at(13)->getInvPtr()->addItem(new Item("wood", "Some wood, the woodworker will definitely want some"));
 
 
 	zoneVec.at(14)->setName("Forest");
@@ -161,7 +161,7 @@ void WorldInterface::createZones() {
 	zoneVec.at(16)->addExit("east", zoneVec.at(17));
 	zoneVec.at(16)->addExit("south", zoneVec.at(18));
 	zoneVec.at(16)->addExit("west", zoneVec.at(12));
-	zoneVec.at(16)->getInvPtr()->addItem(new Item("wood", "Some wood, woodworker will definitely want some"));
+	zoneVec.at(16)->getInvPtr()->addItem(new Item("wood", "Some wood, the woodworker will definitely want some"));
 
 	zoneVec.at(17)->setName("Forest");
 	zoneVec.at(17)->setDescription("Farthest out part of the forest, its hard to find your way out here");
@@ -172,7 +172,7 @@ void WorldInterface::createZones() {
 	zoneVec.at(18)->addExit("north", zoneVec.at(16));
 	zoneVec.at(18)->addExit("east", zoneVec.at(17));
 	zoneVec.at(18)->addExit("west", zoneVec.at(19));
-	zoneVec.at(18)->getInvPtr()->addItem(new Item("wood", "Some wood, woodworker will definitely want some", 2));
+	zoneVec.at(18)->getInvPtr()->addItem(new Item("wood", "Some wood, the woodworker will definitely want some", 2));
 
 	zoneVec.at(19)->setName("Forest");
 	zoneVec.at(19)->setDescription("Southwest part of the forest");
@@ -190,10 +190,6 @@ void WorldInterface::createZones() {
 	zoneVec.at(21)->setDescription("Beneath the tavern, this is where the good stuff is kept");
 	zoneVec.at(21)->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts"));
 	zoneVec.at(21)->getInvPtr()->addItem(new Item("whiskey", "Aged whiskey, hard to come across nowadays"));
-
-
-
-	
 
 
 }
@@ -223,7 +219,20 @@ void WorldInterface::createCommands() {
 
 // Create the state based action vector
 void WorldInterface::createSBAs() {
-			
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(10)->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts", 2));
+				zoneVec.at(10)->getInvPtr()->delItem(zoneVec.at(10)->getInvPtr()->getItemByName("wood"));
+			},
+			[this]() {
+				Item* woodPtr = zoneVec.at(10)->getInvPtr()->getItemByName("wood");
+				if (woodPtr != nullptr) { return woodPtr->getCount() == 4; }
+				return false;
+			}
+		)
+	);
+
 }
 
 // Iterate over commands and return ptr to command that matches, if it doesnt exits return nullptr
@@ -261,10 +270,12 @@ void WorldInterface::printZoneDetails(Zone* zone) {
 }
 
 
+// Command that retuns 1, used to return in main function
 int WorldInterface::quitCommand(vector<const char*> args) {
 	return 1;
 }
 
+// Checks for exit provided and sets players current zone to that exits zone
 int WorldInterface::moveCommand(vector<const char*> args) {
 	if (args.size() == 0) {
 		cout << "Error: Please provide an exit!" << endl;
@@ -283,6 +294,7 @@ int WorldInterface::moveCommand(vector<const char*> args) {
 
 }
 
+// Checks if item exists and removes it from zone inv and adds it to player inv
 int WorldInterface::pickupCommand(vector<const char*> args) {
 	if (args.size() == 0) {
 		cout << "Error: Please provide an item!" << endl;
@@ -302,6 +314,7 @@ int WorldInterface::pickupCommand(vector<const char*> args) {
 
 }
 
+// Checks if item exists and removes it from player inv and adds it to zone inv
 int WorldInterface::dropCommand(vector<const char*> args) {
 	if (args.size() == 0) {
 		cout << "Error: Please provide an item!" << endl;
@@ -319,6 +332,7 @@ int WorldInterface::dropCommand(vector<const char*> args) {
 	return 0;
 }
 
+// Displays contents of players inventory
 int WorldInterface::invCommand(vector<const char*> args) {
 
 	if (player->getInvPtr()->getItemVect().size() == 0) {
@@ -332,10 +346,12 @@ int WorldInterface::invCommand(vector<const char*> args) {
 	return 0;
 }
 
+// TODO: prints details about all of the commands
 int WorldInterface::helpCommand(vector<const char*> args) {
 	return 0;
 }
 
+// Prints details about the players current zone
 int WorldInterface::exploreCommand(vector<const char*> args) {
 	printZoneDetails(player->getCurrentZone());
 	return 0;
