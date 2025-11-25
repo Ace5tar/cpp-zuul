@@ -50,7 +50,7 @@ char* Zone::getName() {
 
 // Allocated memory on the heao and sets the description of this zone
 void Zone::setDescription(const char* description) {
-	char* heapMem = new char[512];
+	char* heapMem = new char[2048];
 	strcpy(heapMem, description);
 	zoneDescription = heapMem;
 }
