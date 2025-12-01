@@ -31,7 +31,7 @@ WorldInterface::WorldInterface() {
 int WorldInterface::runTick() {
 	for (StateBasedAction* sba : SBAVec){
 			if(sba->checkState()) {
-			SBAVec.erase(find(SBAVec.begin(), SBAVec.end(), sba));
+				SBAVec.erase(find(SBAVec.begin(), SBAVec.end(), sba));
 		} 
 	}	
 
@@ -119,6 +119,7 @@ void WorldInterface::createZones() {
 	zoneVec.at(8)->setName("Shipwright");
 	zoneVec.at(8)->setDescription("A gruff looking woman swings around when you open the door, she sits in front of the hull of a ship, various tools strewn on the floor around her. \n\n\"Hmf, another traveller. Let me guess, boat need a bit o' fixing?\"\n\nYou explain your situation, bringing specific attention to the hole in the side of your boat.\n\n\"I can help ya, it is my job after all, but I'm sure you know it ain't gonna be free,\" she thinks for a second, and then says, \"Listen, the tavernkeep been cutting me off recently, I'll fix up your ship if you sneak over there and get me some of his good stuff he keeps in the basement.\"\n\n\"There's an entrance to his storage room around the back. Best way around is through the woods, I'm sure a smart one like you can find it no problem.\" She winks at you, then turns around and gets right back to her work.");
 	zoneVec.at(8)->addExit("street", zoneVec.at(6));
+	zoneVec.at(8)->addStatusFlag("helped-shipwright", false);
 
 	zoneVec.at(9)->setName("Street");
 	zoneVec.at(9)->setDescription("You stroll further down the dirt road and approach the edge of the forest, trees loom above you, crushing you under the weight of their shadows.\n\nTo your left seems to be the woodworkers hut, various axes and saws line the outside wall.\n\nTo your right is the nicest building in the town, likely the tavern. The warm glow inside pulls you towards it.");
@@ -226,36 +227,112 @@ void WorldInterface::createSBAs() {
 	SBAVec.push_back(
 		new StateBasedAction(
 			[this](){
+				cout << "\"Ready to get this baby fixed up?\" The shipwright stands on the deck of your boat with some metal scrap and a makeshift toolbox. \"Show me where the problem is!\"\n\nYou take her down into your storage and she immediately sees the issue. \n\n\"Oh man that's nasty, ill get her fixed for you no problem.\"\n\nShe only works for ten of fifteen minutes before walking back towards you.\n\n\"All patched up, looks good as new if I do say so myself!\" she heads up out of the ship, presumably back to her shop to get back to work." << endl;
+				zoneVec.at(8)->setDescription("You walk in to see her taking a drink of whiskey from the bottle you got her while putting together her boat. She's either too busy working or too drunk to notice that you arrived, likely the latter.");
+			},
+			[this](){
+				return (zoneVec.at(8)->checkStatusFlag("helped-shipwright") && player->getCurrentZone() == zoneVec.at(0));
+			}
+		)
+	);
+
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
 				zoneVec.at(3)->setDescription("Its hard to see the wreck without the light of the town, but your eyes adjust enough to make out a hole carved in the side of the boat. \n\nA large cliffside blocks your way further north. In another situation you might try to climb it, but that doesnt seem like the most important thing right now.");
 				zoneVec.at(4)->setDescription("Its cramped, dark, and probably home to some kind of creeper. Nothing here seems to be of any use to you. ");
 			},
 			[this](){
-				return (zoneVec.at(4)->getInvPtr()->getItemByName("gearbox") != nullptr);
+				return (zoneVec.at(4)->getInvPtr()->getItemByName("gearbox") == nullptr);
 			}
 		)
 	);
+
 	SBAVec.push_back(
 		new StateBasedAction(
 			[this](){
 				zoneVec.at(5)->setDescription("Its not far before the shore creeps in closer than you are comfortable with, no reason the get that close again.");
 			},
 			[this](){
-				return (zoneVec.at(5)->getInvPtr()->getItemByName("coin") != nullptr);
+				return (zoneVec.at(5)->getInvPtr()->getItemByName("coin") == nullptr);
 			}
 		)
 	);
+
 	SBAVec.push_back(
 		new StateBasedAction(
 			[this](){
 				zoneVec.at(7)->setDescription("Its not the biggest you've seen, only about twice as high as you are, but it seems to do the job for this small settlement. Its made of wood far nicer than the rest of the town's buildings, almost as if it was built the day before, although it certainy has been around longer than anyone in this town can remember. ");
 			},
 			[this](){
-				return (zoneVec.at(7)->getInvPtr()->getItemByName("coin") != nullptr);
+				return (zoneVec.at(7)->getInvPtr()->getItemByName("coin") == nullptr);
+			}
+		)
+	);
+
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(8)->setDescription("The shipwright beams eagerly when she hears you approach, but her face turns sour noticing that you dont have what she asked for. You explain the lock on the door, and how you wont be able to get in without a key.\n\n\"Well damn, he's upping his security! Lucky for us I've got a special key that can get into any lock, don't you worry...\" \n\nAfter rummaging around her pile of tools she eventually pulls out a crowbar.\n\n\"Just use this puppy, I can worry about the consequences later. And hey, for your troubles I'll throw in a little extra coin too,\" with that, she turns around and goes back to work.");
+			},
+			[this](){
+				return (player->getCurrentZone() == zoneVec.at(20));
+			}
+		)
+	);	
+
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(8)->setDescription("\"Well I'll be damned, you got the good stuff! I knew you'd get it done,\" she grabs the drink from your hand and sets in down on the floor by her tools, \"Meet me o'er by the boat n I can get it all fixed up for you.\"\n\n\"Don't think I forgot your little extra payment too, its over there by the dresser, I'm sure you'll find it.\" She heads out the door, leaving you, and your payment, alone in the building.");
+				player->getInvPtr()->delItem(player->getInvPtr()->getItemByName("whiskey"));
+				zoneVec.at(8)->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts", 2));
+				zoneVec.at(8)->changeStatusFlag("helped-shipwright", true);
+			},
+			[this](){
+				return (player->getInvPtr()->getItemByName("whiskey") != nullptr && player->getCurrentZone() == zoneVec.at(8));
+			}
+		)
+	);
+SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(10)->setDescription("She looks up from her whitting projects with curious eyes.\n\n\"Oh, you brought the wood! Go ahead and throw them over there and I'll grab the coin.\"");
+			},
+			[this](){
+				Item* woodPtr = player->getInvPtr()->getItemByName("wood");
+				if (woodPtr != nullptr) {
+					return (woodPtr->getCount() == 4);
+				}
+				else {
+					return false;
+				}
+			}
+		)
+	);
+
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				cout << "\"Thanks for grabbing that for me, your reward is over there on the table by the door, feel free to grab it on your way out!\"" << endl;
+				zoneVec.at(10)->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts", 2));
+				zoneVec.at(10)->getInvPtr()->delItem(zoneVec.at(10)->getInvPtr()->getItemByName("wood"));
+				zoneVec.at(10)->setDescription("She's still whitting, you still can't tell what she's making.\n\n\"Thanks again for grabbing that lumber! You've been a huge help.\"");
+			},
+			[this](){
+				Item* woodPtr = zoneVec.at(10)->getInvPtr()->getItemByName("wood");
+				if (woodPtr != nullptr) {
+				return (woodPtr->getCount() == 4);
+				}
+				else {
+					return false;
+				}
 			}
 		)
 	);
 
 }
+		
 
 // Iterate over commands and return ptr to command that matches, if it doesnt exits return nullptr
 fnPtr WorldInterface::getCmd(const char* key){
