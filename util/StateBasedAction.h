@@ -14,7 +14,7 @@ class StateBasedAction {
 	public:
 		StateBasedAction();
 		StateBasedAction(function<void()> func, function<bool()> state);
-		void checkState();
+		bool checkState();
 		~StateBasedAction();
 };
 

@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include <cstring>
+#include <algorithm>
 #include "world-util/Player.h"
 #include "world-util/Zone.h"
 #include "../util/StateBasedAction.h"
@@ -28,8 +29,13 @@ WorldInterface::WorldInterface() {
 
 // Checks state based actions then asks user for input and does that command
 int WorldInterface::runTick() {
-	for (StateBasedAction* sba : SBAVec){ sba->checkState(); }	
+	for (StateBasedAction* sba : SBAVec){
+			if(sba->checkState()) {
+			SBAVec.erase(find(SBAVec.begin(), SBAVec.end(), sba));
+		} 
+	}	
 
+	cout << " > ";
 	cin.getline(input, 128);
 	while(strlen(input) == 0) {cin.getline(input, 128);}
 	CommandParser cp = CommandParser(input);
@@ -68,95 +74,94 @@ void WorldInterface::createZones() {
 	zoneVec.push_back(new Zone(21));
 	
 	zoneVec.at(0)->setName("Ship");
-	zoneVec.at(0)->setDescription("Your ship!");
+	zoneVec.at(0)->setDescription("Your very own ship, she's seen worse but it's probably best to get her fixed up sooner rather than later.");
 	zoneVec.at(0)->addExit("docks", zoneVec.at(1));
 
 	zoneVec.at(1)->setName("Docks");
-	zoneVec.at(1)->setDescription("The docks");
+	zoneVec.at(1)->setDescription("Just a bunch of planks jutting out into the sea, every coast town has to have one. ");
 	zoneVec.at(1)->addExit("ship", zoneVec.at(0));
 	zoneVec.at(1)->addExit("north", zoneVec.at(2));
 	zoneVec.at(1)->addExit("south", zoneVec.at(5));
 	zoneVec.at(1)->addExit("street", zoneVec.at(6));
 
 	zoneVec.at(2)->setName("Coast");
-	zoneVec.at(2)->setDescription("Just north of the docks");
+	zoneVec.at(2)->setDescription("The white sand under your feet shines in constrast to the black tar that threatens to swallow you whole. You've enough experience to know to keep your distance from the shoreline.");
 	zoneVec.at(2)->addExit("north", zoneVec.at(3));
 	zoneVec.at(2)->addExit("south", zoneVec.at(1));
 
 	zoneVec.at(3)->setName("Coast");
-	zoneVec.at(3)->setDescription("Far north from the docks");
+	zoneVec.at(3)->setDescription("Its hard to see the wreck without the light of the town, but your eyes adjust enough to make out a hole carved in the side of the boat. You expected not to be the first to explore a find like this, you just hope whoever it was left something for you too.\n\nA large cliffside blocks your way further north. In another situation you might try to climb it, but that doesnt seem like the most important thing right now.");
 	zoneVec.at(3)->addExit("south", zoneVec.at(2));
 	zoneVec.at(3)->addExit("wreck", zoneVec.at(4));
 
 	zoneVec.at(4)->setName("Shipwreck");
-	zoneVec.at(4)->setDescription("Someones ship who wasnt as lucky as me");
+	zoneVec.at(4)->setDescription("Its cramped, dark, and probably home to some kind of creeper. Nothing you find seems of use say for the broken engine sitting in the back. You manage to pull out a gearbox that seems to be in good enough condition, even though the rest of the engine is just junk.");
 	zoneVec.at(4)->addExit("coast", zoneVec.at(3));
 	zoneVec.at(4)->getInvPtr()->addItem(new Item("gearbox", "A gearbox for a ship's engine"));
 
 	zoneVec.at(5)->setName("Coast");
-	zoneVec.at(5)->setDescription("Just south of the docks");
+	zoneVec.at(5)->setDescription("Its not far before the shore creeps in closer than you are comfortable with, but a glimmer of something catches your eye just barely resting on the black tar. You're probably fine to go to the shore for just a second, right?");
 	zoneVec.at(5)->addExit("north", zoneVec.at(1));
 	zoneVec.at(5)->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts"));
 
 	zoneVec.at(6)->setName("Street");
-	zoneVec.at(6)->setDescription("West side of the main street");
+	zoneVec.at(6)->setDescription("You walk down the thin dirt road. The ground seems unnaturally dry, and the air unnaturally dead. \n\nFar ahead you can see a large dense forest. From this distance the shadows that weave between the trees seem to be impenetrable. \n\nTo your left is the town's Star Effigy, because even small settlements like this need a place for worship. \n\nAcross from the statue sits what seems to be the shipwrights place of residence. Off to the side is a small wooden boat, either halfway built or halfway deconstructed, it's hard to tell.");
 	zoneVec.at(6)->addExit("docks", zoneVec.at(1));
 	zoneVec.at(6)->addExit("street", zoneVec.at(9));
 	zoneVec.at(6)->addExit("statue", zoneVec.at(7));
 	zoneVec.at(6)->addExit("shipwright", zoneVec.at(8));
 
 	zoneVec.at(7)->setName("Statue");
-	zoneVec.at(7)->setDescription("Statue of Star");
+	zoneVec.at(7)->setDescription("Its not the biggest you've seen, only about twice as high as you are, but it seems to do the job for this small settlement. Its made of wood far nicer than the rest of the town's buildings, almost as if it was built the day before, although it certainy has been around longer than anyone in this town can remember. \n\nAt the foot of the statue is a small coin. At some point someone must have made an offering, but Star seems to have rejeted it. Besides, you will get more use out of a measly coin than Star would.");
 	zoneVec.at(7)->addExit("street", zoneVec.at(6));
 	zoneVec.at(7)->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts"));
 
 	zoneVec.at(8)->setName("Shipwright");
-	zoneVec.at(8)->setDescription("Residence of the town shipwright");
+	zoneVec.at(8)->setDescription("A gruff looking woman swings around when you open the door, she sits in front of the hull of a ship, various tools strewn on the floor around her. \n\n\"Hmf, another traveller. Let me guess, boat need a bit o' fixing?\"\n\nYou explain your situation, bringing specific attention to the hole in the side of your boat.\n\n\"I can help ya, it is my job after all, but I'm sure you know it ain't gonna be free,\" she thinks for a second, and then says, \"Listen, the tavernkeep been cutting me off recently, I'll fix up your ship if you sneak over there and get me some of his good stuff he keeps in the basement.\"\n\n\"There's an entrance to his storage room around the back. Best way around is through the woods, I'm sure a smart one like you can find it no problem.\" She winks at you, then turns around and gets right back to her work.");
 	zoneVec.at(8)->addExit("street", zoneVec.at(6));
 
 	zoneVec.at(9)->setName("Street");
-	zoneVec.at(9)->setDescription("East side of the main street");
+	zoneVec.at(9)->setDescription("You stroll further down the dirt road and approach the edge of the forest, trees loom above you, crushing you under the weight of their shadows.\n\nTo your left seems to be the woodworkers hut, various axes and saws line the outside wall.\n\nTo your right is the nicest building in the town, likely the tavern. The warm glow inside pulls you towards it.");
 	zoneVec.at(9)->addExit("street", zoneVec.at(6));
 	zoneVec.at(9)->addExit("forest", zoneVec.at(12));
 	zoneVec.at(9)->addExit("woodworker", zoneVec.at(10));
 	zoneVec.at(9)->addExit("tavern", zoneVec.at(11));
 
 	zoneVec.at(10)->setName("Woodworker");
-	zoneVec.at(10)->setDescription("Residence of the town woodworker");
+	zoneVec.at(10)->setDescription("\"Hi, can I help you with anything?\" A lean girl sits on a chair in the corner whitting, you can't tell what from this distance.\n\nYou explain your situation to her.\n\n\"Well, I can't really help much, but if you need a little extra coin I am in need of some more lumber. If you bring me say, 4 pieces of lumber I'll give you some coin, how about 2 pieces?\"\n\nShe returns to whitting, leaving you alone.");
 	zoneVec.at(10)->addExit("street", zoneVec.at(9));
 
 	zoneVec.at(11)->setName("Tavern");
-	zoneVec.at(11)->setDescription("Hub for travellers");
+	zoneVec.at(11)->setDescription("A man behind a counter perks up when you step in. \n\n\"Hello traveller, welcome to our little settlements tavern. We sell only the finest goods and services around here. I can help you to some supplies for only 10 coin, or for 20 theres a room you can reside in for as long as you would like. What do you say?\"\n\nThose supplies seem useful, but you dont have enough coin at the moment.");
 	zoneVec.at(11)->addExit("street", zoneVec.at(9));
 
 	zoneVec.at(12)->setName("Forest");
-	zoneVec.at(12)->setDescription("Westmost part of the forest");
+	zoneVec.at(12)->setDescription("Dense trees surround you, it's hard to find your way in the dark.\n\nYou can see the light of the town shine through some of the trees.");
 	zoneVec.at(12)->addExit("street", zoneVec.at(9));
 	zoneVec.at(12)->addExit("north", zoneVec.at(13));
 	zoneVec.at(12)->addExit("east", zoneVec.at(16));
 	zoneVec.at(12)->addExit("south", zoneVec.at(19));
 
 	zoneVec.at(13)->setName("Forest");
-	zoneVec.at(13)->setDescription("Northwest part of the forest");
+	zoneVec.at(13)->setDescription("Dense trees surround you, it's hard to find your way in the dark.");
 	zoneVec.at(13)->addExit("south", zoneVec.at(12));
 	zoneVec.at(13)->addExit("east", zoneVec.at(14));
 	zoneVec.at(13)->getInvPtr()->addItem(new Item("wood", "Some wood, the woodworker will definitely want some"));
 
-
 	zoneVec.at(14)->setName("Forest");
-	zoneVec.at(14)->setDescription("Northeast part of the forest, there is an abandoned shack here");
+	zoneVec.at(14)->setDescription("Dense trees surround you, it's hard to find your way in the dark.\n\nBetween the trees is a run down shack, who knows how long it's been since it was used.");
 	zoneVec.at(14)->addExit("shack", zoneVec.at(15));
 	zoneVec.at(14)->addExit("east", zoneVec.at(17));
 	zoneVec.at(14)->addExit("south", zoneVec.at(16));
 	zoneVec.at(14)->addExit("west", zoneVec.at(13));
 
 	zoneVec.at(15)->setName("Shack");
-	zoneVec.at(15)->setDescription("An abandoned shack");
+	zoneVec.at(15)->setDescription("The dust makes it hard to breath, and the flooring creaks with each step. Someone may have lived here at some point, but they havent for a long long time. \n\nThere is a propellor in the corner, it's rusty and old, but it's probably better than nothing.");
 	zoneVec.at(15)->addExit("forest", zoneVec.at(14));
 	zoneVec.at(15)->getInvPtr()->addItem(new Item("propeller", "It's not perfect but it'll do the trick"));
 
 	zoneVec.at(16)->setName("Forest");
-	zoneVec.at(16)->setDescription("Eastmost part of the forest");
+	zoneVec.at(16)->setDescription("Dense trees surround you, it's hard to find your way in the dark.");
 	zoneVec.at(16)->addExit("north", zoneVec.at(14));
 	zoneVec.at(16)->addExit("east", zoneVec.at(17));
 	zoneVec.at(16)->addExit("south", zoneVec.at(18));
@@ -164,34 +169,32 @@ void WorldInterface::createZones() {
 	zoneVec.at(16)->getInvPtr()->addItem(new Item("wood", "Some wood, the woodworker will definitely want some"));
 
 	zoneVec.at(17)->setName("Forest");
-	zoneVec.at(17)->setDescription("Farthest out part of the forest, its hard to find your way out here");
+	zoneVec.at(17)->setDescription("The light of the town is a distant memory, out here it's just you and the forest. The forest begins to swirl, paths become familiar, yet every step feels new. Eventually you come across a patch of stones that you passed by not too long ago, probably best to stay close to town. ");
 	zoneVec.at(17)->addExit("back", zoneVec.at(16));
 
 	zoneVec.at(18)->setName("Forest");
-	zoneVec.at(18)->setDescription("Southeast part of the forest");
+	zoneVec.at(18)->setDescription("Dense trees surround you, it's hard to find your way in the dark.");
 	zoneVec.at(18)->addExit("north", zoneVec.at(16));
 	zoneVec.at(18)->addExit("east", zoneVec.at(17));
 	zoneVec.at(18)->addExit("west", zoneVec.at(19));
 	zoneVec.at(18)->getInvPtr()->addItem(new Item("wood", "Some wood, the woodworker will definitely want some", 2));
 
 	zoneVec.at(19)->setName("Forest");
-	zoneVec.at(19)->setDescription("Southwest part of the forest");
+	zoneVec.at(19)->setDescription("Dense trees surround you, it's hard to find your way in the dark.\n\nSome light shines through a few of the trees, not a lot, but just enough to draw you closer.");
 	zoneVec.at(19)->addExit("north", zoneVec.at(12));
 	zoneVec.at(19)->addExit("east", zoneVec.at(18));
 	zoneVec.at(19)->addExit("alley", zoneVec.at(20));
 
 	zoneVec.at(20)->setName("Tavern Alley");
-	zoneVec.at(20)->setDescription("Alley behind the tavern, theres a locked door to the basement");
+	zoneVec.at(20)->setDescription("You emerge from the forest to see the back of the tavern, a cellar door set into the ground, and a canister of fuel laying next to it.\n\nThere is a lock on the cellar door, preventing anyone from getting it. Better tell the shipwright.");
 	zoneVec.at(20)->addExit("forest", zoneVec.at(19));
 	zoneVec.at(20)->getInvPtr()->addItem(new Item("fuel", "A can half full of fuel for the boat"));
-
+	zoneVec.at(20)->addStatusFlag("know-locked", false);
 
 	zoneVec.at(21)->setName("Basement");
-	zoneVec.at(21)->setDescription("Beneath the tavern, this is where the good stuff is kept");
+	zoneVec.at(21)->setDescription("It's dark, damp, and cold. Shelves of various items line the walls, but nothing stand out to you, say for a bottle of whiskey sitting on a barrel in the corner.");
 	zoneVec.at(21)->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts"));
 	zoneVec.at(21)->getInvPtr()->addItem(new Item("whiskey", "Aged whiskey, hard to come across nowadays"));
-
-
 }
 
 // Create the command map
@@ -223,13 +226,31 @@ void WorldInterface::createSBAs() {
 	SBAVec.push_back(
 		new StateBasedAction(
 			[this](){
-				zoneVec.at(10)->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts", 2));
-				zoneVec.at(10)->getInvPtr()->delItem(zoneVec.at(10)->getInvPtr()->getItemByName("wood"));
+				zoneVec.at(3)->setDescription("Its hard to see the wreck without the light of the town, but your eyes adjust enough to make out a hole carved in the side of the boat. \n\nA large cliffside blocks your way further north. In another situation you might try to climb it, but that doesnt seem like the most important thing right now.");
+				zoneVec.at(4)->setDescription("Its cramped, dark, and probably home to some kind of creeper. Nothing here seems to be of any use to you. ");
 			},
-			[this]() {
-				Item* woodPtr = zoneVec.at(10)->getInvPtr()->getItemByName("wood");
-				if (woodPtr != nullptr) { return woodPtr->getCount() == 4; }
-				return false;
+			[this](){
+				return (zoneVec.at(4)->getInvPtr()->getItemByName("gearbox") != nullptr);
+			}
+		)
+	);
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(5)->setDescription("Its not far before the shore creeps in closer than you are comfortable with, no reason the get that close again.");
+			},
+			[this](){
+				return (zoneVec.at(5)->getInvPtr()->getItemByName("coin") != nullptr);
+			}
+		)
+	);
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(7)->setDescription("Its not the biggest you've seen, only about twice as high as you are, but it seems to do the job for this small settlement. Its made of wood far nicer than the rest of the town's buildings, almost as if it was built the day before, although it certainy has been around longer than anyone in this town can remember. ");
+			},
+			[this](){
+				return (zoneVec.at(7)->getInvPtr()->getItemByName("coin") != nullptr);
 			}
 		)
 	);
@@ -237,7 +258,7 @@ void WorldInterface::createSBAs() {
 }
 
 // Iterate over commands and return ptr to command that matches, if it doesnt exits return nullptr
-fnPtr WorldInterface::getCmd(const char* key) {
+fnPtr WorldInterface::getCmd(const char* key){
 	for (auto const [cmdKey, cmd] : cmds) {
 		if (strcmp(cmdKey, key) == 0) {return cmd;}
 	}
@@ -254,8 +275,8 @@ WorldInterface::~WorldInterface() {
 
 // Print all of the details of the provided zone
 void WorldInterface::printZoneDetails(Zone* zone) {
-	cout << "You are in: " << zone->getName() << endl;
-	cout << zone->getDescription() << endl;
+	cout << "You are in: " << zone->getName() << endl << endl;
+	cout << zone->getDescription() << endl << endl;
 	if (zone->getInvPtr()->getItemVect().size() == 0) {
 		cout << "You don't spot any items here..." << endl;
 	} else	{	
@@ -377,7 +398,7 @@ int WorldInterface::helpCommand(vector<const char*> args) {
 	cout << "'quit'" << endl
 	     << " alias - 'exit', 'stop'" << endl
 	     << " arguments - none" << endl << endl
-	     << " End the program" << "\n";
+	     << "End the program" << "\n";
 	return 0;
 }
 

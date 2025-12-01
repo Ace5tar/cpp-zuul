@@ -23,8 +23,12 @@ StateBasedAction::StateBasedAction(function<void()> func, function<bool()> state
 }
 
 // If the state needed is true, then do function
-void StateBasedAction::checkState() {
-	if (stateNeeded()) {funcToDo();}
+bool StateBasedAction::checkState() {
+	if (stateNeeded()) {
+		funcToDo();
+		return true;
+	}
+	return false;
 }
 
 // Deconstructor

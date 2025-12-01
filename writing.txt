@@ -1,0 +1,171 @@
+
+ -- intro
+
+\"That damn seabeast knocked up my ship pretty bad... I hope I can make it to that little trade spot off the coast of Intercy before she gives in. I got a hole in the hull, and I'm gonna need to fix this engine. Plus I'm getting low on supplies so I should stop there anyway.\"/n/nYou pull into the docks of the trade villiage, if you can even call it that, it's only three buildings. Yellow-orange gas lanterns pop up every dozen feet or so. It would be hard to make your way without them.\n\nTaking in the sights you see a shipwreck down the coast, might be a good place for spare parts.\n\nUse 'help' for a list of commands!
+
+ -- Ship 0
+
+Your very own ship, she's seen worse but it's probably best to get her fixed up sooner rather than later.
+
+ -- *After bringing wiskey to shipwright*
+
+\"Ready to get this baby fixed up?\" The shipwright stands on the deck of your boat with some metal scrap and a makeshift toolbox. \"Show me where the problem is!\"
+
+You take her down into your storage and she immediately sees the issue. \n\n\"Oh man that's nasty, ill get her fixed for you no problem.\"\n\nShe only works for ten of fifteen minutes before walking back towards you.\n\n\"All patched up, looks good as new if I do say so myself!\" she heads up out of the ship, presumably back to her shop to get back to work.
+
+ -- Docks 1
+
+Just a bunch of planks jutting out into the sea, every coast town has to have one. 
+
+ -- North coast 2
+
+The white sand under your feet shines in constrast to the black tar that threatens to swallow you whole. You've enough experience to know to keep your distance from the shoreline.
+
+ -- Norther coast 3
+
+Its hard to see the wreck without the light of the town, but your eyes adjust enough to make out a hole carved in the side of the boat. You expected not to be the first to explore a find like this, you just hope whoever it was left something for you too.\n\nA large cliffside blocks your way further north. In another situation you might try to climb it, but that doesnt seem like the most important thing right now.
+
+ -- *after picking up gearbox*
+
+Its hard to see the wreck without the light of the town, but your eyes adjust enough to make out a hole carved in the side of the boat. \n\nA large cliffside blocks your way further north. In another situation you might try to climb it, but that doesnt seem like the most important thing right now.
+
+ -- Shipwreck 4
+
+Its cramped, dark, and probably home to some kind of creeper. Nothing you find seems of use say for the broken engine sitting in the back. You manage to pull out a gearbox that seems to be in good enough condition, even though the rest of the engine is just junk.
+
+ -- *After picking up geabox*
+
+Its cramped, dark, and probably home to some kind of creeper. Nothing here seems to be of any use to you. 
+
+ -- south coast 5
+
+Its not far before the shore creeps in closer than you are comfortable with, but a glimmer of something catches your eye just barely resting on the black tar. You're probably fine to go to the shore for just a second, right?
+
+  -- *after picking up the coin*
+
+Its not far before the shore creeps in closer than you are comfortable with, no reason the get that close again.
+
+ -- street west 6
+
+You walk down the thin dirt road. The ground seems unnaturally dry, and the air unnaturally dead. \n\nFar ahead you can see a large dense forest. From this distance the shadows that weave between the trees seem to be impenetrable. \n\nTo your left is the town's Star Effigy, because even small settlements like this need a place for worship. \n\nAcross from the statue sits what seems to be the shipwrights place of residence. Off to the side is a small wooden boat, either halfway built or halfway deconstructed, it's hard to tell.
+
+ -- statue 7
+
+Its not the biggest you've seen, only about twice as high as you are, but it seems to do the job for this small settlement. Its made of wood far nicer than the rest of the town's buildings, almost as if it was built the day before, although it certainy has been around longer than anyone in this town can remember. \n\nAt the foot of the statue is a small coin. At some point someone must have made an offering, but Star seems to have rejeted it. Besides, you will get more use out of a measly coin than Star would.
+
+ -- *After picking up coin*
+
+Its not the biggest you've seen, only about twice as high as you are, but it seems to do the job for this small settlement. Its made of wood far nicer than the rest of the town's buildings, almost as if it was built the day before, although it certainy has been around longer than anyone in this town can remember. 
+
+ -- shipwright 8
+
+A gruff looking woman swings around when you open the door, she sits in front of the hull of a ship, various tools strewn on the floor around her. \n\n\"Hmf, another traveller. Let me guess, boat need a bit o' fixing?\"\n\nYou explain your situation, bringing specific attention to the hole in the side of your boat.\n\n\"I can help ya, it is my job after all, but I'm sure you know it ain't gonna be free,\" she thinks for a second, and then says, \"Listen, the tavernkeep been cutting me off recently, I'll fix up your ship if you sneak over there and get me some of his good stuff he keeps in the basement.\"\n\n\"There's an entrance to his storage room around the back. Best way around is through the woods, I'm sure a smart one like you can find it no problem.\" She winks at you, then turns around and gets right back to her work.
+
+ -- *after finding out door is locked*
+
+The shipwright beams eagerly when she hears you approach, but her face turns sour noticing that you dont have what she asked for. You explain the lock on the door, and how you wont be able to get in without a key.\n\n\"Well damn, he's upping his security! Lucky for us I've got a special key that can get into any lock, don't you worry...\" \n\nAfter rummaging around her pile of tools she eventually pulls out a crowbar.\n\n\"Just use this puppy, I can worry about the consequences later. And hey, for your troubles I'll throw in a little extra coin too,\" with that, she turns around and goes back to work.
+
+ -- *After getting whiskey* 
+
+\"Well I'll be damned, you got the good stuff! I knew you'd get it done,\" she grabs the drink from your hand and sets in down on the floor by her tools, \"Meet me o'er by the boat n I can get it all fixed up for you.\"\n\n\"Don't think I forgot your little extra payment too, its over there by the dresser, I'm sure you'll find it.\" She heads out the door, leaving you, and your payment, alone in the building.
+
+ -- *After fixing boat*
+
+You walk in to see her taking a drink of whiskey from the bottle you got her while putting together her boat. She's either too busy working or too drunk to notice that you arrived, likely the latter.
+
+ -- street east 9
+
+You stroll further down the dirt road and approach the edge of the forest, trees loom above you, crushing you under the weight of their shadows.\n\nTo your left seems to be the woodworkers hut, various axes and saws line the outside wall.\n\nTo your right is the nicest building in the town, likely the tavern. The warm glow inside pulls you towards it.
+
+ -- woodworker 10
+
+\"Hi, can I help you with anything?\" A lean girl sits on a chair in the corner whitting, you can't tell what from this distance.\n\nYou explain your situation to her.\n\n\"Well, I can't really help much, but if you need a little extra coin I am in need of some more lumber. If you bring me say, 4 pieces of lumber I'll give you some coin, how about 2 pieces?\"\n\nShe returns to whitting, leaving you alone.
+
+ -- *Player has 4 wood*
+
+She looks up from her whitting projects with curious eyes.\n\n\"Oh, you brought the wood! Go ahead and throw them over there and I'll grab the coin.\"
+
+ -- *One time after putting down the wood*
+
+\"Thanks for grabbing that for me, your reward is over there on the table by the door, feel free to grab it on your way out!\"
+
+ -- *After putting down wood* 
+
+She's still whitting, you still can't tell what she's making.\n\n\"Thanks again for grabbing that lumber! You've been a huge help.\"
+
+ -- tavern 11
+
+A man behind a counter perks up when you step in. \n\n\"Hello traveller, welcome to our little settlements tavern. We sell only the finest goods and services around here. I can help you to some supplies for only 10 coin, or for 20 theres a room you can reside in for as long as you would like. What do you say?\"\n\nThose supplies seem useful, but you dont have enough coin at the moment.
+
+ -- *Player has 10 coin
+
+\"Hello traveller, welcome to our little settlements tavern. We sell only the finest goods and services around here. I can help you to some supplies for only 10 coin, or for 20 theres a room you can reside in for as long as you would like. What do you say?\"\n\nYou ask for some supplies.\n\n\"Ahh, some supplies huh? Well if you have the coin then I have the goods for you. Go ahead and set down what you have.\"
+
+ -- *One time after putting down coin*
+
+ \"Good.. a deals a deal good friend. Here are your supplies.\"
+
+ -- *after putting down coin*
+
+\"Don't forget, only 20 coin for a room!\"
+
+ -- forest west 12
+
+Dense trees surround you, it's hard to find your way in the dark.\n\nYou can see the light of the town shine through some of the trees.
+
+ -- forest northwest 13
+
+Dense trees surround you, it's hard to find your way in the dark.
+
+-- forest northeast 14
+
+Dense trees surround you, it's hard to find your way in the dark.\n\nBetween the trees is a run down shack, who knows how long it's been since it was used.
+
+ -- shack 15
+
+The dust makes it hard to breath, and the flooring creaks with each step. Someone may have lived here at some point, but they havent for a long long time. \n\nThere is a propellor in the corner, it's rusty and old, but it's probably better than nothing.
+
+ -- *After picking up propellor*
+
+The dust makes it hard to breath, and the flooring creaks with each step. Someone may have lived here at some point, but they havent for a long long time. 
+
+ -- forest east 16
+
+Dense trees surround you, it's hard to find your way in the dark.
+
+ -- forest far 17
+
+The light of the town is a distant memory, out here it's just you and the forest. The forest begins to swirl, paths become familiar, yet every step feels new. Eventually you come across a patch of stones that you passed by not too long ago, probably best to stay close to town. 
+
+ -- forest southeast 18
+
+Dense trees surround you, it's hard to find your way in the dark.
+
+ -- forest southwest 19
+
+Dense trees surround you, it's hard to find your way in the dark.\n\nSome light shines through a few of the trees, not a lot, but just enough to draw you closer.
+
+ -- tavern back 20
+
+You emerge from the forest to see the back of the tavern, a cellar door set into the ground, and a canister of fuel laying next to it.\n\nThere is a lock on the cellar door, preventing anyone from getting it. Better tell the shipwright.
+
+ -- *after taking fuel*
+
+You emerge from the forest to see the back of the tavern, a cellar door set into the ground.\n\nThere is a lock on the cellar door, preventing anyone from getting it. Better tell the shipwright.
+
+ -- *after getting crowbar*
+
+You emerge from the forest to see the back of the tavern, a cellar door set into the ground.\n\nYou take the crobar to the lock, careful not to make too much noise, and it snaps in half under your might.
+
+ -- *after opening door* 
+
+You emerge from the forest to see the back of the tavern, a cellar door set into the ground.\n\nThe tavern cellar door has been opened.
+
+ -- tavern basement 21
+
+It's dark, damp, and cold. Shelves of various items line the walls, but nothing stand out to you, say for a bottle of whiskey sitting on a barrel in the corner.
+
+ -- *After picking up whiskey*
+
+It's dark, damp, and cold. Shelves of various items line the walls, but nothing stand out to you. 
+
