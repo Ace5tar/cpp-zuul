@@ -23,7 +23,8 @@ WorldInterface::WorldInterface() {
 	player = new Player(zoneVec.at(0));
 
 	input = new char[128];
-
+	
+	player->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts", 3));
 	printZoneDetails(player->getCurrentZone());
 }
 
@@ -157,7 +158,7 @@ void WorldInterface::createZones() {
 	zoneVec.at(14)->addExit("west", zoneVec.at(13));
 
 	zoneVec.at(15)->setName("Shack");
-	zoneVec.at(15)->setDescription("The dust makes it hard to breath, and the flooring creaks with each step. Someone may have lived here at some point, but they havent for a long long time. \n\nThere is a propellor in the corner, it's rusty and old, but it's probably better than nothing.");
+	zoneVec.at(15)->setDescription("The dust makes it hard to breath, and the flooring creaks with each step. Someone may have lived here at some point, but they havent for a long long time. \n\nThere is a propeller in the corner, it's rusty and old, but it's probably better than nothing.");
 	zoneVec.at(15)->addExit("forest", zoneVec.at(14));
 	zoneVec.at(15)->getInvPtr()->addItem(new Item("propeller", "It's not perfect but it'll do the trick"));
 
@@ -213,6 +214,7 @@ void WorldInterface::createCommands() {
 
 	cmds.insert({"drop", &WorldInterface::dropCommand});
 
+	cmds.insert({"inventory", &WorldInterface::invCommand});
 	cmds.insert({"inv", &WorldInterface::invCommand});
 
 	cmds.insert({"explore", &WorldInterface::exploreCommand});
@@ -231,7 +233,7 @@ void WorldInterface::createSBAs() {
 				zoneVec.at(8)->setDescription("You walk in to see her taking a drink of whiskey from the bottle you got her while putting together her boat. She's either too busy working or too drunk to notice that you arrived, likely the latter.");
 			},
 			[this](){
-				return (zoneVec.at(8)->checkStatusFlag("helped-shipwright") && player->getCurrentZone() == zoneVec.at(0));
+				return (zoneVec.at(8)->checkStatusFlag("helped-shipwright") && player->getCurrentZone() == zoneVec.at(1));
 			}
 		)
 	);
@@ -274,6 +276,7 @@ void WorldInterface::createSBAs() {
 		new StateBasedAction(
 			[this](){
 				zoneVec.at(8)->setDescription("The shipwright beams eagerly when she hears you approach, but her face turns sour noticing that you dont have what she asked for. You explain the lock on the door, and how you wont be able to get in without a key.\n\n\"Well damn, he's upping his security! Lucky for us I've got a special key that can get into any lock, don't you worry...\" \n\nAfter rummaging around her pile of tools she eventually pulls out a crowbar.\n\n\"Just use this puppy, I can worry about the consequences later. And hey, for your troubles I'll throw in a little extra coin too,\" with that, she turns around and goes back to work.");
+				zoneVec.at(8)->getInvPtr()->addItem(new Item("crowbar", "The shipwright told me to use this to get into the cellar"));
 			},
 			[this](){
 				return (player->getCurrentZone() == zoneVec.at(20));
@@ -331,8 +334,77 @@ SBAVec.push_back(
 		)
 	);
 
-}
-		
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(11)->setDescription("\"Hello traveller, welcome to our little settlements tavern. We sell only the finest goods and services around here. I can help you to some supplies for only 10 coin, or for 20 theres a room you can reside in for as long as you would like. What do you say?\"\n\nYou ask for some supplies.\n\n\"Ahh, some supplies huh? Well if you have the coin then I have the goods for you. Go ahead and set down what you have.\"");
+			},
+			[this](){
+				Item* coinPtr = player->getInvPtr()->getItemByName("coin");
+				if (coinPtr != nullptr) {
+					return (coinPtr->getCount() == 10);
+				} else {
+					return false;
+				}
+			}
+		)
+	);
+
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				cout << "\"Good.. a deals a deal good friend. Here are your supplies.\"" << endl;
+				zoneVec.at(11)->getInvPtr()->addItem(new Item("supplies", "Extra food and other supplies for you journey"));
+				zoneVec.at(11)->getInvPtr()->delItem(zoneVec.at(11)->getInvPtr()->getItemByName("coin"));
+				zoneVec.at(11)->setDescription("\"Don't forget, only 20 coin for a room!\"");
+			},
+			[this](){
+				Item* coinPtr = zoneVec.at(11)->getInvPtr()->getItemByName("coin");
+				if (coinPtr != nullptr) {
+					return (coinPtr->getCount() == 10);
+				} else {
+					return false;
+				}
+			}
+		)
+	);
+
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(15)->setDescription("The dust makes it hard to breath, and the flooring creaks with each step. Someone may have lived here at some point, but they havent for a long long time. ");
+			},
+			[this](){
+				return (zoneVec.at(15)->getInvPtr()->getItemByName("propeller") == nullptr);
+			}
+		)
+	);
+
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(20)->setDescription("You emerge from the forest to see the back of the tavern, a cellar door set into the ground.\n\nThere is a lock on the cellar door, preventing anyone from getting it. Better tell the shipwright.");
+			},
+			[this](){
+				return (zoneVec.at(20)->getInvPtr()->getItemByName("fuel") == nullptr);
+			}
+		)
+	);
+	
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(20)->setDescription("You emerge from the forest to see the back of the tavern, a cellar door set into the ground.\n\nYou take the crobar to the lock, careful not to make too much noise, and it snaps in half under your might.");
+				zoneVec.at(20)->addExit("cellar", zoneVec.at(21));
+			},
+			[this](){
+				return (player->getInvPtr()->getItemByName("crowbar") != nullptr);
+			}
+		)
+	);
+
+}	
+
 
 // Iterate over commands and return ptr to command that matches, if it doesnt exits return nullptr
 fnPtr WorldInterface::getCmd(const char* key){
@@ -385,12 +457,9 @@ int WorldInterface::moveCommand(vector<const char*> args) {
 		cout << "Error: That exit doesnt exitst!" << endl;
 		return 0;
 	}
-
-
 	player->changeZone(exitPtr);	
 	printZoneDetails(exitPtr);
 	return 0;
-
 }
 
 // Checks if item exists and removes it from zone inv and adds it to player inv
@@ -404,13 +473,10 @@ int WorldInterface::pickupCommand(vector<const char*> args) {
 		cout << "Error: Cannot find that item!" << endl;
 		return 0;
 	} 
-
 	player->getCurrentZone()->getInvPtr()->delItem(itemPtr);
 	player->getInvPtr()->addItem(itemPtr);
 	cout << "Picked up the " << itemPtr->getName() << endl;
 	return 0;
-
-
 }
 
 // Checks if item exists and removes it from player inv and adds it to zone inv
@@ -424,7 +490,6 @@ int WorldInterface::dropCommand(vector<const char*> args) {
 		cout << "Error: Cannot find that item!" << endl;
 		return 0;
 	} 
-
 	player->getInvPtr()->delItem(itemPtr);
 	player->getCurrentZone()->getInvPtr()->addItem(itemPtr);
 	cout << "Dropped the " << itemPtr->getName() << endl;
@@ -433,7 +498,6 @@ int WorldInterface::dropCommand(vector<const char*> args) {
 
 // Displays contents of players inventory
 int WorldInterface::invCommand(vector<const char*> args) {
-
 	if (player->getInvPtr()->getItemVect().size() == 0) {
 		cout << "There are no items in your inventory!" << endl;
 	} else {
@@ -441,7 +505,6 @@ int WorldInterface::invCommand(vector<const char*> args) {
 			cout << "\t" << item->getName() << " x" << item->getCount() << " - " << item->getDescription() << endl;
 		}
 	}
-
 	return 0;
 }
 
@@ -456,6 +519,11 @@ int WorldInterface::helpCommand(vector<const char*> args) {
 	     << " alias - 'mv', 'go'" << endl
 	     << " arguments - none" << endl << endl
 	     << "Allows you to travel through zone exits" << "\n\n\n";
+
+	cout << "'inventory'" << endl
+	     << " alias - 'inv'" << endl
+	     << " arguments - none" << endl << endl
+	     << "Display items in your inventory" << "\n";
 
 	cout << "'pickup'" << endl
 	     << " alias - 'get'" << endl
