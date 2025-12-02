@@ -83,14 +83,14 @@ void Zone::addStatusFlag(const char* name, bool initValue) {
 
 bool Zone::checkStatusFlag(const char* name) {
 	for (auto const [flagName, val] : statusFlagMap) {
-		if (strcmp(flagName, name)) {return val;}
+		if (strcmp(flagName, name) == 0) {return val;}
 	}
 	return NULL;
 }
 
 void Zone::changeStatusFlag(const char* name, bool newValue) {
 	for (auto const [flagName, val] : statusFlagMap) {
-		if (strcmp(flagName, name)) {
+		if (strcmp(flagName, name) == 0) {
 			statusFlagMap.at(flagName) = newValue;
 			return;
 		}
