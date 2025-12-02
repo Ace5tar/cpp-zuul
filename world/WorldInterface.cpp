@@ -36,6 +36,10 @@ int WorldInterface::runTick() {
 		} 
 	}	
 
+	if (zoneVec.at(0)->checkStatusFlag("win-con")) {
+		return 2;
+	}
+
 	cout << " > ";
 	cin.getline(input, 128);
 	while(strlen(input) == 0) {cin.getline(input, 128);}
@@ -77,6 +81,8 @@ void WorldInterface::createZones() {
 	zoneVec.at(0)->setName("Ship");
 	zoneVec.at(0)->setDescription("Your very own ship, she's seen worse but it's probably best to get her fixed up sooner rather than later.");
 	zoneVec.at(0)->addExit("docks", zoneVec.at(1));
+	zoneVec.at(0)->addStatusFlag("hole-fixed", false);
+	zoneVec.at(0)->addStatusFlag("win-con", false);
 
 	zoneVec.at(1)->setName("Docks");
 	zoneVec.at(1)->setDescription("Just a bunch of planks jutting out into the sea, every coast town has to have one. ");
@@ -108,7 +114,7 @@ void WorldInterface::createZones() {
 	zoneVec.at(6)->setName("Street");
 	zoneVec.at(6)->setDescription("You walk down the thin dirt road. The ground seems unnaturally dry, and the air unnaturally dead. \n\nFar ahead you can see a large dense forest. From this distance the shadows that weave between the trees seem to be impenetrable. \n\nTo your left is the town's Star Effigy, because even small settlements like this need a place for worship. \n\nAcross from the statue sits what seems to be the shipwrights place of residence. Off to the side is a small wooden boat, either halfway built or halfway deconstructed, it's hard to tell.");
 	zoneVec.at(6)->addExit("docks", zoneVec.at(1));
-	zoneVec.at(6)->addExit("street", zoneVec.at(9));
+	zoneVec.at(6)->addExit("east", zoneVec.at(9));
 	zoneVec.at(6)->addExit("statue", zoneVec.at(7));
 	zoneVec.at(6)->addExit("shipwright", zoneVec.at(8));
 
@@ -124,7 +130,7 @@ void WorldInterface::createZones() {
 
 	zoneVec.at(9)->setName("Street");
 	zoneVec.at(9)->setDescription("You stroll further down the dirt road and approach the edge of the forest, trees loom above you, crushing you under the weight of their shadows.\n\nTo your left seems to be the woodworkers hut, various axes and saws line the outside wall.\n\nTo your right is the nicest building in the town, likely the tavern. The warm glow inside pulls you towards it.");
-	zoneVec.at(9)->addExit("street", zoneVec.at(6));
+	zoneVec.at(9)->addExit("west", zoneVec.at(6));
 	zoneVec.at(9)->addExit("forest", zoneVec.at(12));
 	zoneVec.at(9)->addExit("woodworker", zoneVec.at(10));
 	zoneVec.at(9)->addExit("tavern", zoneVec.at(11));
@@ -197,6 +203,7 @@ void WorldInterface::createZones() {
 	zoneVec.at(21)->setDescription("It's dark, damp, and cold. Shelves of various items line the walls, but nothing stand out to you, say for a bottle of whiskey sitting on a barrel in the corner.");
 	zoneVec.at(21)->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts"));
 	zoneVec.at(21)->getInvPtr()->addItem(new Item("whiskey", "Aged whiskey, hard to come across nowadays"));
+	zoneVec.at(21)->addExit("alley", zoneVec.at(20));
 }
 
 // Create the command map
@@ -229,11 +236,12 @@ void WorldInterface::createSBAs() {
 	SBAVec.push_back(
 		new StateBasedAction(
 			[this](){
-				cout << "\"Ready to get this baby fixed up?\" The shipwright stands on the deck of your boat with some metal scrap and a makeshift toolbox. \"Show me where the problem is!\"\n\nYou take her down into your storage and she immediately sees the issue. \n\n\"Oh man that's nasty, ill get her fixed for you no problem.\"\n\nShe only works for ten of fifteen minutes before walking back towards you.\n\n\"All patched up, looks good as new if I do say so myself!\" she heads up out of the ship, presumably back to her shop to get back to work." << endl;
+				cout << endl << "\"Ready to get this baby fixed up?\" The shipwright stands on the deck of your boat with some metal scrap and a makeshift toolbox. \"Show me where the problem is!\"\n\nYou take her down into your storage and she immediately sees the issue. \n\n\"Oh man that's nasty, ill get her fixed for you no problem.\"\n\nShe only works for ten of fifteen minutes before walking back towards you.\n\n\"All patched up, looks good as new if I do say so myself!\" she heads up out of the ship, presumably back to her shop to get back to work." << endl;
 				zoneVec.at(8)->setDescription("You walk in to see her taking a drink of whiskey from the bottle you got her while putting together her boat. She's either too busy working or too drunk to notice that you arrived, likely the latter.");
+				zoneVec.at(0)->changeStatusFlag("hole-fixed", true);
 			},
 			[this](){
-				return (zoneVec.at(8)->checkStatusFlag("helped-shipwright") && player->getCurrentZone() == zoneVec.at(1));
+				return (zoneVec.at(8)->checkStatusFlag("helped-shipwright") && player->getCurrentZone() == zoneVec.at(0));
 			}
 		)
 	);
@@ -293,7 +301,7 @@ void WorldInterface::createSBAs() {
 				zoneVec.at(8)->changeStatusFlag("helped-shipwright", true);
 			},
 			[this](){
-				return (player->getInvPtr()->getItemByName("whiskey") != nullptr && player->getCurrentZone() == zoneVec.at(8));
+				return (player->getInvPtr()->getItemByName("whiskey") != nullptr);
 			}
 		)
 	);
@@ -317,7 +325,7 @@ SBAVec.push_back(
 	SBAVec.push_back(
 		new StateBasedAction(
 			[this](){
-				cout << "\"Thanks for grabbing that for me, your reward is over there on the table by the door, feel free to grab it on your way out!\"" << endl;
+				cout << endl << "\"Thanks for grabbing that for me, your reward is over there on the table by the door, feel free to grab it on your way out!\"" << endl;
 				zoneVec.at(10)->getInvPtr()->addItem(new Item("coin", "Defacto currency in these parts", 2));
 				zoneVec.at(10)->getInvPtr()->delItem(zoneVec.at(10)->getInvPtr()->getItemByName("wood"));
 				zoneVec.at(10)->setDescription("She's still whitting, you still can't tell what she's making.\n\n\"Thanks again for grabbing that lumber! You've been a huge help.\"");
@@ -353,7 +361,7 @@ SBAVec.push_back(
 	SBAVec.push_back(
 		new StateBasedAction(
 			[this](){
-				cout << "\"Good.. a deals a deal good friend. Here are your supplies.\"" << endl;
+				cout << endl << "\"Good.. a deals a deal good friend. Here are your supplies.\"" << endl;
 				zoneVec.at(11)->getInvPtr()->addItem(new Item("supplies", "Extra food and other supplies for you journey"));
 				zoneVec.at(11)->getInvPtr()->delItem(zoneVec.at(11)->getInvPtr()->getItemByName("coin"));
 				zoneVec.at(11)->setDescription("\"Don't forget, only 20 coin for a room!\"");
@@ -403,6 +411,58 @@ SBAVec.push_back(
 		)
 	);
 
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(20)->setDescription("You emerge from the forest to see the back of the tavern, a cellar door set into the ground.\n\nThe tavern cellar door has been opened.");
+			},
+			[this](){
+				return (player->getInvPtr()->getItemByName("corwbar") != nullptr && player->getCurrentZone() == zoneVec.at(20));
+			}
+		)
+	);
+
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(21)->setDescription("It's dark, damp, and cold. Shelves of various items line the walls, but nothing stand out to you. ");
+			},
+			[this](){
+				return (zoneVec.at(21)->getInvPtr()->getItemByName("whiskey") == nullptr);
+			}
+		)
+	);
+
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				cout << endl << "\"Seems like I have everything I need to make a new engine\"\n\n After a short while you put together a new engine fo your ship. It's not perfect, but it'll last you long enought to get somewhere selling a new one." << endl;
+				player->getInvPtr()->delItem(player->getInvPtr()->getItemByName("gearbox"));
+				player->getInvPtr()->delItem(player->getInvPtr()->getItemByName("propeller"));
+				player->getInvPtr()->delItem(player->getInvPtr()->getItemByName("fuel"));
+				player->getInvPtr()->addItem(new Item("engine", "Replacement engine for your ship"));
+			},
+			[this](){
+				return player->getInvPtr()->getItemByName("gearbox") != nullptr 
+						&& player->getInvPtr()->getItemByName("propeller") != nullptr 
+						&& player->getInvPtr()->getItemByName("fuel") != nullptr;
+			}
+		)
+	);
+
+	SBAVec.push_back(
+		new StateBasedAction(
+			[this](){
+				zoneVec.at(0)->changeStatusFlag("win-con", true);
+			},
+			[this](){
+				return player->getInvPtr()->getItemByName("engine") != nullptr
+						&& player->getInvPtr()->getItemByName("supplies") != nullptr
+						&& zoneVec.at(0)->checkStatusFlag("hole-fixed")
+						&& player->getCurrentZone() == zoneVec.at(0);
+			}
+		)
+	);
 }	
 
 
